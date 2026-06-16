@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Grade Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Student Grade Tracker</h1>
+
+        <input type="number" id="roll" placeholder="Roll Number">
+        <input type="text" id="name" placeholder="Student Name">
+        <input type="number" id="marks" placeholder="Marks">
+
+        <button onclick="addStudent()">Add Student</button>
+
+        <table id="studentTable">
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Marks</th>
+                <th>Grade</th>
+            </tr>
+        </table>
+
+        <div id="summary"></div>
+    </div>
+
+<script>
+    let students = [];
+
+function getGrade(marks){
+    if(marks >= 90) return "A";
+    if(marks >= 75) return "B";
+    if(marks >= 60) return "C";
+    if(marks >= 40) return "D";
+    return "F";
+}
+
+function addStudent(){
+
+    let roll = document.getElementById("roll").value;
+    let name = document.getElementById("name").value;
+    let marks = Number(document.getElementById("marks").value);
+
+    students.push({
+        roll,
+        name,
+        marks
+    });
+
+    displayStudents();
+}
+
+function displayStudents(){
+
+    let table = document.getElementById("studentTable");
+
+    table.innerHTML = `
+    <tr>
+        <th>Roll No</th>
+        <th>Name</th>
+        <th>Marks</th>
+        <th>Grade</th>
+    </tr>`;
+
+    let total = 0;
+    let highest = students[0].marks;
+    let lowest = students[0].marks;
+
+    students.forEach(student => {
+
+        total += student.marks;
+
+        highest = Math.max(highest, student.marks);
+        lowest = Math.min(lowest, student.marks);
+
+        table.innerHTML += `
+        <tr>
+            <td>${student.roll}</td>
+            <td>${student.name}</td>
+            <td>${student.marks}</td>
+            <td>${getGrade(student.marks)}</td>
+        </tr>`;
+    });
+
+    let avg = (total/students.length).toFixed(2);
+
+    document.getElementById("summary").innerHTML = `
+        <h3>Average Marks: ${avg}</h3>
+        <h3>Highest Marks: ${highest}</h3>
+        <h3>Lowest Marks: ${lowest}</h3>
+        <h3>Total Students:${students.length}</h3>
+    `;
+}
+
+</script>
+</body>
+</html>
